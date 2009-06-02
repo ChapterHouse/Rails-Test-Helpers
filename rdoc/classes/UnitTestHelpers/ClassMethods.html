@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: UnitTestHelpers::ClassMethods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">UnitTestHelpers::ClassMethods</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/unit_test_helpers_rb.html">
+                lib/unit_test_helpers.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+This module provides basic unit level test helpers to test the various
+aspects of a model. Many of these tests will correspond to the validations
+that are used in the model. If a method takes multiple attributes as its
+parameter, then a test will be generated for each attribute given. If these
+helpers do not cover a required test that falls outside of the standard
+patterns, you can leverage the underlying test helper instance methods in
+<a href="../UnitTestHelpers.html">UnitTestHelpers</a> and build your own.
+All of the helpers rely on a definition of a DefaultValue at the test class
+level. This is to be a hash of attribute value pairs that match the model.
+</p>
+<p>
+Example:
+</p>
+<pre>
+ class SomeModelTest &lt; ActiveSupport::TestCase
+
+   DefaultValues =  {
+     :name =&gt; &quot;Some Name&quot;,
+     :color =&gt; &quot;Blue&quot;,
+     :placement =&gt; &quot;Ceiling&quot;,
+     :quantity =&gt; 7,
+     :email =&gt; &quot;foo@bar.baz&quot;
+   }
+
+   test_create
+   test_format_of :email
+   test_inclusion_of :placement
+   test_length_of :name =&gt; 3..100
+   test_long :placement =&gt; 32
+   test_numericality_of :quantity
+   test_presence_of :name, :color, :placement, :quantity, :email
+   test_short :color =&gt; 3
+   test_uniqueness_of :email
+   test_update :name =&gt; &quot;Sum Name&quot;
+
+ end
+</pre>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000017">default_values</a>&nbsp;&nbsp;
+      <a href="#M000016">target</a>&nbsp;&nbsp;
+      <a href="#M000018">test_create</a>&nbsp;&nbsp;
+      <a href="#M000022">test_format_of</a>&nbsp;&nbsp;
+      <a href="#M000023">test_inclusion_of</a>&nbsp;&nbsp;
+      <a href="#M000024">test_length_of</a>&nbsp;&nbsp;
+      <a href="#M000026">test_long</a>&nbsp;&nbsp;
+      <a href="#M000021">test_numericality_of</a>&nbsp;&nbsp;
+      <a href="#M000020">test_presence_of</a>&nbsp;&nbsp;
+      <a href="#M000025">test_short</a>&nbsp;&nbsp;
+      <a href="#M000027">test_uniqueness_of</a>&nbsp;&nbsp;
+      <a href="#M000019">test_update</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
+
+        <div class="method-heading">
+          <a href="#M000017" class="method-signature">
+          <span class="method-name">default_values</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the default values hash after resolving any delayed fixtures.
+Analogous to the same method at the intance level in <a
+href="../UnitTestHelpers.html#M000014">UnitTestHelpers#default_values</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000017-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 62</span>
+62:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_values</span>
+63:       <span class="ruby-identifier">resolve_delayed_fixtures</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:DefaultValues</span>)
+64:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
+
+        <div class="method-heading">
+          <a href="#M000016" class="method-signature">
+          <span class="method-name">target</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="ClassMethods.html#M000016">target</a> model of the
+test. This is determined by taking the current class name and removing the
+word &#8216;Test&#8217; from the end of it. For example, PersonTest will
+assume that it is testing the Person model.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000016-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 56</span>
+56:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target</span>
+57:       <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-5</span>].<span class="ruby-identifier">to_sym</span>)
+58:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
+
+        <div class="method-heading">
+          <a href="#M000018" class="method-signature">
+          <span class="method-name">test_create</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that an instance of the model can be created and saved using the
+default values.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  test_create
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000018-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 77</span>
+77:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_create</span>
+78:       <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">:test_create</span>) { <span class="ruby-identifier">check_create</span> }
+79:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <a href="#M000022" class="method-signature">
+          <span class="method-name">test_format_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes is required to fit a certain format by the
+model. Best paired with validates_format_of. The default value will be used
+to test against the format. Additionally you can provide valid and invalid
+values to test with by giving a hash that contains an array of values in
+the <em>_:with_valid</em> and <em>:with_invalid</em> keys respectively. A
+separate test will be run for each attribute given. The following example
+would result in three separate tests. The first and last test only uses the
+default value to test with. The second test uses additional test values.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :email =&gt; &quot;foo@bar.baz&quot;
+  }
+
+  test_format_of :location, :email, {:with_valid =&gt; 'xxx@example.com', :with_invalid =&gt; ['something other than email', 'cold not fun']}, :name
+</pre>
+<p>
+The following would accomplish the same thing
+</p>
+<pre>
+  test_format_of :name, :location
+  test_format_of :email, :with_valid =&gt; 'xxx@example.com', :with_invalid =&gt; ['something other than email', 'cold not fun']
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 174</span>
+174:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_format_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+175:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+176:         <span class="ruby-identifier">values</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>] = [] }
+177:         <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+178:         <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+179:           <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>] = {<span class="ruby-identifier">:with_valid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>]} <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+180:           <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">test_values</span><span class="ruby-operator">|</span>
+181:             <span class="ruby-identifier">test_values</span> = [<span class="ruby-identifier">test_values</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">test_values</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+182:             <span class="ruby-identifier">test_values</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">values</span>[<span class="ruby-identifier">key</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span> }
+183:           <span class="ruby-keyword kw">end</span>
+184:           <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+185:         <span class="ruby-keyword kw">end</span>
+186:         
+187:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_format_of_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+188:           <span class="ruby-identifier">check_format_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>
+189:           <span class="ruby-identifier">values</span>[<span class="ruby-identifier">:with_valid</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">check_format_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span> }
+190:           <span class="ruby-identifier">values</span>[<span class="ruby-identifier">:with_invalid</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">check_format_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">false</span> }
+191:         <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+192:       <span class="ruby-keyword kw">end</span>
+193:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000023" class="method-detail">
+        <a name="M000023"></a>
+
+        <div class="method-heading">
+          <a href="#M000023" class="method-signature">
+          <span class="method-name">test_inclusion_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes is required to fit within a certain list of
+acceptable values by the model. Best paired with validates_inclusion_of.
+The default value will be used to test against the acceptable values.
+Additionally you can provide valid and invalid values to test with by
+giving a hash that contains an array of values in the <em>:with_valid</em>
+and <em>:with_invalid</em> keys respectively. A separate test will be run
+for each attribute given. The following example would result in three
+separate tests. The first and last test only uses the default value to test
+with. The second test uses additional test values.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :style =&gt; &quot;Contemporary&quot;
+    :direction =&gt; 'Vertical'
+  }
+
+  test_inclusion_of :color, :style, {:with_valid =&gt; 'Classic', :with_invalid =&gt; ['Really Ugly', &quot;Your parents' idea of cool&quot;]}, :direction
+</pre>
+<p>
+The following would accomplish the same thing
+</p>
+<pre>
+  test_inclusion_of :color, :direction
+  test_inclusion_of :style, :with_valid =&gt; 'Classic', :with_invalid =&gt; ['Really Ugly', &quot;Your parents' idea of cool&quot;]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000023-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000023-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 217</span>
+217:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_inclusion_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+218:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+219:         <span class="ruby-identifier">values</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">key</span>] = [] }
+220:         <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+221:         <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+222:           <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>] = {<span class="ruby-identifier">:with_valid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>]} <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+223:           <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">test_values</span><span class="ruby-operator">|</span>
+224:             <span class="ruby-identifier">test_values</span> = [<span class="ruby-identifier">test_values</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">test_values</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+225:             <span class="ruby-identifier">test_values</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">values</span>[<span class="ruby-identifier">key</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">value</span> }
+226:           <span class="ruby-keyword kw">end</span>
+227:           <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+228:         <span class="ruby-keyword kw">end</span>
+229:         
+230:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_inclusion_of_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+231:           <span class="ruby-identifier">check_inclusion_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>
+232:           <span class="ruby-identifier">values</span>[<span class="ruby-identifier">:with_valid</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">check_inclusion_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span> }
+233:           <span class="ruby-identifier">values</span>[<span class="ruby-identifier">:with_invalid</span>].<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">check_inclusion_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span>, <span class="ruby-keyword kw">false</span> }
+234:         <span class="ruby-keyword kw">end</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+235:       <span class="ruby-keyword kw">end</span>
+236:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000024" class="method-detail">
+        <a name="M000024"></a>
+
+        <div class="method-heading">
+          <a href="#M000024" class="method-signature">
+          <span class="method-name">test_length_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes required to have a length within a specified
+range by the model. Best paired with validates_length_of. Each attribute
+given can specify a range that limits the minimum and maximum lengths
+allowed. If an exact size is required then a single value may be given or
+it can be not specified and the exact size can be inferred from the
+matching default attribute value
+</p>
+<p>
+Two separate test will be run for each attribute given. One for a minimum
+length check and fone for a maximum length check. The following example
+would result in eight separate tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :placement =&gt; &quot;Ceiling&quot;
+  }
+
+  test_length_of :color, :location =&gt; 10, :name =&gt; 3..100, :placement =&gt; 4..17
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000024-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000024-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 255</span>
+255:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_length_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+256:       <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+257:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">x</span>] = <span class="ruby-keyword kw">nil</span> }
+258: 
+259:       <span class="ruby-identifier">short</span>, <span class="ruby-identifier">long</span> = {}, {}
+260:       <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+261:         <span class="ruby-identifier">val</span> = [<span class="ruby-identifier">val</span>].<span class="ruby-identifier">flatten</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Range</span>)
+262:         <span class="ruby-identifier">short</span>[<span class="ruby-identifier">item</span>] = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">first</span>
+263:         <span class="ruby-identifier">long</span>[<span class="ruby-identifier">item</span>] = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">last</span>
+264:       <span class="ruby-keyword kw">end</span>
+265:       <span class="ruby-identifier">test_short</span>(<span class="ruby-identifier">short</span>)
+266:       <span class="ruby-identifier">test_long</span>(<span class="ruby-identifier">long</span>)
+267:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000026" class="method-detail">
+        <a name="M000026"></a>
+
+        <div class="method-heading">
+          <a href="#M000026" class="method-signature">
+          <span class="method-name">test_long</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes required to have a maximum length by the
+model. Best paired with validates_length_of.
+</p>
+<p>
+If a length is not given for an attribute, the maximum length will be
+inferred from the value used.
+</p>
+<ul>
+<li>If a value for an attribute is supplied then the inferred maximum length
+will be the length of the supplied value minus one.
+
+</li>
+<li>If a value for an attribute is not supplied then the inferred maximum
+length will be exactly the length of the default value for that attribute.
+
+</li>
+</ul>
+<p>
+If a length for an attribute is given without a value, the matching default
+attribute value will be repeated until it reaches the length of one more
+than the supplied length and then tested.
+</p>
+<p>
+A separate test will be run for each attribute given. The following example
+would result in four separate tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :placement =&gt; &quot;Ceiling&quot;
+  }
+
+  test_long :placement, :location =&gt; 10, :color =&gt; [7, &quot;PurpleX&quot;], :name =&gt; [nil, &quot;Some really long name&quot;]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000026-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000026-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 319</span>
+319:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_long</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+320:       <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+321:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">x</span>] = <span class="ruby-keyword kw">nil</span> }
+322:       <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">length_and_value</span><span class="ruby-operator">|</span>
+323:         <span class="ruby-identifier">maximum_length</span> = [<span class="ruby-identifier">length_and_value</span>].<span class="ruby-identifier">flatten</span>[<span class="ruby-value">0</span>]
+324:         <span class="ruby-identifier">value_to_use</span> = [<span class="ruby-identifier">length_and_value</span>].<span class="ruby-identifier">flatten</span>[<span class="ruby-value">1</span>]
+325:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_long_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_longer_than</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">maximum_length</span>, <span class="ruby-identifier">value_to_use</span> }
+326:       <span class="ruby-keyword kw">end</span>
+327:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
+
+        <div class="method-heading">
+          <a href="#M000021" class="method-signature">
+          <span class="method-name">test_numericality_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes is required to be numeric by the model. Best
+paired with validates_numericality_of. If no value is given, a non numeric
+value will be created by treating the default value as a string, removing
+the last digit, and adding the letter &#8216;z&#8217; to the beginning of
+the string. A separate test will be run for each attribute given. The
+following example would result in three separate tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :quantity =&gt; 7,
+    :rating =&gt; 9,
+    :size =&gt; 3
+  }
+
+  test_numericality_of :quantity, {:rating =&gt; 'none'}, [:size, 'abc']
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 137</span>
+137:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_numericality_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+138:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+139:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+140:           <span class="ruby-identifier">name</span> = <span class="ruby-identifier">item</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">first</span>
+141:           <span class="ruby-identifier">value</span> = <span class="ruby-identifier">item</span>[<span class="ruby-identifier">name</span>]
+142:         <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)
+143:           <span class="ruby-identifier">name</span> = <span class="ruby-identifier">item</span>[<span class="ruby-value">0</span>]
+144:           <span class="ruby-identifier">value</span> = <span class="ruby-identifier">item</span>[<span class="ruby-value">1</span>]
+145:         <span class="ruby-keyword kw">else</span>
+146:           <span class="ruby-identifier">name</span> = <span class="ruby-identifier">item</span>
+147:           <span class="ruby-identifier">value</span> = <span class="ruby-keyword kw">nil</span>
+148:         <span class="ruby-keyword kw">end</span>
+149:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_numericality_of_#{name.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_numericality_of</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">value</span> }
+150:       <span class="ruby-keyword kw">end</span>
+151:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">test_presence_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes is required to be present by the model. Best
+paired with validates_presence_of. A separate test will be run for each
+attribute name given. The following example would result in three separate
+tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  test_presence_of :name, :location, :color
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 114</span>
+114:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_presence_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+115:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+116:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_presence_of_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_presence_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span> }
+117:       <span class="ruby-keyword kw">end</span>
+118:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000025" class="method-detail">
+        <a name="M000025"></a>
+
+        <div class="method-heading">
+          <a href="#M000025" class="method-signature">
+          <span class="method-name">test_short</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes required to have a minimum length by the
+model. Best paired with validates_length_of.
+</p>
+<p>
+If a length is not given for an attribute, the minimum length will be
+inferred from the value used.
+</p>
+<ul>
+<li>If a value for an attribute is supplied then the inferred minimum length
+will be the length of the supplied value plus one.
+
+</li>
+<li>If a value for an attribute is not supplied then the inferred minimum
+length will be exactly the length of the default value for that attribute.
+
+</li>
+</ul>
+<p>
+If a length for an attribute is given without a value, the matching default
+attribute value will be trimmed down to a length of one less than the
+supplied length and then tested.
+</p>
+<p>
+A separate test will be run for each attribute given. The following example
+would result in four separate tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :placement =&gt; &quot;Ceiling&quot;
+  }
+
+  test_short :name, :location =&gt; 4, :color =&gt; [2, &quot;Re], :placement =&gt; [nil, &quot;Floo&quot;]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000025-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000025-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 289</span>
+289:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_short</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+290:       <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+291:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">x</span>] = <span class="ruby-keyword kw">nil</span> }
+292:       <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">length_and_value</span><span class="ruby-operator">|</span>
+293:         <span class="ruby-identifier">minimum_length</span> = [<span class="ruby-identifier">length_and_value</span>].<span class="ruby-identifier">flatten</span>[<span class="ruby-value">0</span>]
+294:         <span class="ruby-identifier">value_to_use</span> = [<span class="ruby-identifier">length_and_value</span>].<span class="ruby-identifier">flatten</span>[<span class="ruby-value">1</span>]
+295:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_short_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_shorter_than</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">minimum_length</span>, <span class="ruby-identifier">value_to_use</span> }
+296:       <span class="ruby-keyword kw">end</span>
+297:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000027" class="method-detail">
+        <a name="M000027"></a>
+
+        <div class="method-heading">
+          <a href="#M000027" class="method-signature">
+          <span class="method-name">test_uniqueness_of</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that a set of attributes is required to be unique by the model. Best
+paired with validates_uniqueness_of. A separate test will be run for each
+attribute name given. The following example would result in three separate
+tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  test_uniqueness_of :name, :location, :color
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000027-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000027-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 341</span>
+341:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_uniqueness_of</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+342:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+343:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_uniqueness_of_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_uniqueness_of</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span> }
+344:       <span class="ruby-keyword kw">end</span>
+345:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">test_update</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Tests that an instance of the model can have the specified attributes
+updated and saved. Then tests that each updated value can be retrieved back
+from the database. A separate test will be run for each attribute name
+given. The following example would result in three separate tests.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  test_update :name =&gt; &quot;Sum Name&quot;, :color =&gt; &quot;Bloo&quot;, :location =&gt; &quot;123 Mane&quot;
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 94</span>
+ 94:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+ 95:       <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+ 96:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">x</span>] = <span class="ruby-keyword kw">nil</span> }
+ 97:       <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+ 98:         <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_update_of_#{item.to_s}&quot;</span>.<span class="ruby-identifier">to_sym</span>) { <span class="ruby-identifier">check_update</span> <span class="ruby-identifier">item</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span> }
+ 99:       <span class="ruby-keyword kw">end</span>
+100:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: UnitTestHelpers</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">UnitTestHelpers</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/unit_test_helpers_rb.html">
+                lib/unit_test_helpers.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Unless you are writing your own specialized test you probably are looking
+for the helpers in <a
+href="UnitTestHelpers/ClassMethods.html">UnitTestHelpers::ClassMethods</a>.
+</p>
+<p>
+This module provides basic unit level test helpers to test the various
+aspects of a model. It provides the basic building blocks for the test
+helpers in <a
+href="UnitTestHelpers/ClassMethods.html">UnitTestHelpers::ClassMethods</a>.
+These instance level methods can also be used to build new tests when the
+tests fall outside of the domain covered by the main test helpers. All of
+the helpers rely on a definition of a DefaultValue at the test class level.
+This is to be a hash of attribute value pairs that match the model.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class SomeModelTest &lt; ActiveSupport::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+  end
+</pre>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000005">check_create</a>&nbsp;&nbsp;
+      <a href="#M000009">check_format_of</a>&nbsp;&nbsp;
+      <a href="#M000010">check_inclusion_of</a>&nbsp;&nbsp;
+      <a href="#M000012">check_longer_than</a>&nbsp;&nbsp;
+      <a href="#M000008">check_numericality_of</a>&nbsp;&nbsp;
+      <a href="#M000007">check_presence_of</a>&nbsp;&nbsp;
+      <a href="#M000011">check_shorter_than</a>&nbsp;&nbsp;
+      <a href="#M000013">check_uniqueness_of</a>&nbsp;&nbsp;
+      <a href="#M000006">check_update</a>&nbsp;&nbsp;
+      <a href="#M000014">default_values</a>&nbsp;&nbsp;
+      <a href="#M000015">error_messages_from</a>&nbsp;&nbsp;
+      <a href="#M000004">instance_with</a>&nbsp;&nbsp;
+      <a href="#M000003">instance_without</a>&nbsp;&nbsp;
+      <a href="#M000001">new_instance</a>&nbsp;&nbsp;
+      <a href="#M000002">with_instance</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Module <a href="UnitTestHelpers/ClassMethods.html" class="link">UnitTestHelpers::ClassMethods</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
+
+        <div class="method-heading">
+          <a href="#M000005" class="method-signature">
+          <span class="method-name">check_create</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an instance of the model can be created and saved using the
+default values.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_create
+    check_create
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 510</span>
+510:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_create</span>
+511:     <span class="ruby-identifier">with_instance</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span>
+512:       <span class="ruby-identifier">assert_not_nil</span> <span class="ruby-identifier">instance</span>, <span class="ruby-node">&quot;Failed to create #{self.class.target.name}.&quot;</span>
+513:       <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>, <span class="ruby-node">&quot;Failed to create valid #{self.class.target.name} with #{instance.inspect}.\n&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">error_messages_from</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+514:     <span class="ruby-keyword kw">end</span>
+515:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="#M000009" class="method-signature">
+          <span class="method-name">check_format_of</span><span class="method-args">(item, value=nil, valid=true)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to fit a certain format by the model.
+Best paired with validates_format_of.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_format_of_location
+    check_format_of :location
+    check_format_of :location, &quot;456 Elm St.&quot;
+    check_format_of :location, &quot;Street 101 WTF&quot;, false
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 599</span>
+599:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_format_of</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">value</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">valid</span>=<span class="ruby-keyword kw">true</span>)
+600:     <span class="ruby-identifier">value</span> = <span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+601:     <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">item</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span>
+602:       <span class="ruby-identifier">errors</span> = <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>)
+603:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">valid</span>
+604:         <span class="ruby-identifier">assert</span> <span class="ruby-operator">!</span><span class="ruby-identifier">errors</span>, <span class="ruby-node">&quot;#{self.class.target.name} should have allowed the format of #{value} for #{item}.&quot;</span>
+605:       <span class="ruby-keyword kw">else</span>
+606:         <span class="ruby-identifier">assert</span> <span class="ruby-identifier">errors</span>, <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed the format of #{value} for #{item}.&quot;</span>
+607:       <span class="ruby-keyword kw">end</span>
+608:     <span class="ruby-keyword kw">end</span>
+609:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="#M000010" class="method-signature">
+          <span class="method-name">check_inclusion_of</span><span class="method-args">(item, value=nil, valid=true)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to fit within a certain list of
+acceptable values by the model. Best paired with validates_inclusion_of.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_inclusion_of_color
+    check_inclusion_of :color
+    check_inclusion_of :color, &quot;Red&quot;
+    check_inclusion_of :color, &quot;Blu&quot;, false
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000010-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 626</span>
+626:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_inclusion_of</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">value</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">valid</span>=<span class="ruby-keyword kw">true</span>)
+627:     <span class="ruby-identifier">value</span> = <span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+628:     <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">item</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span>
+629:       <span class="ruby-identifier">errors</span> = <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>)
+630:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">valid</span>
+631:         <span class="ruby-identifier">assert</span> <span class="ruby-operator">!</span><span class="ruby-identifier">errors</span>, <span class="ruby-node">&quot;#{self.class.target.name} should have allowed the inclusion of #{value} for #{item}.&quot;</span>
+632:       <span class="ruby-keyword kw">else</span>
+633:         <span class="ruby-identifier">assert</span> <span class="ruby-identifier">errors</span>, <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed the inclusion of #{value} for #{item}.&quot;</span>
+634:       <span class="ruby-keyword kw">end</span>
+635:     <span class="ruby-keyword kw">end</span>
+636:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="#M000012" class="method-signature">
+          <span class="method-name">check_longer_than</span><span class="method-args">(item, length=nil, value=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to have a maximum length by the
+model. Best paired with validates_length_of.
+</p>
+<p>
+If a length is not given, the maximum length will be inferred from the
+value used.
+</p>
+<ul>
+<li>If a value is supplied then the inferred maximum length will be the length
+of the supplied value minus one.
+
+</li>
+<li>If a value is not supplied then the inferred maximum length will be exactly
+the length of the default value for the attribute.
+
+</li>
+</ul>
+<p>
+If a length is given without a value, the default attribute value will be
+repeated until it reaches the length of one more than the supplied length
+and then tested.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_maximum_size_of_name
+    # The following are equivalent if the model requires a maximum name length of 9.
+    check_longer_than :name
+    check_longer_than :name, 9
+    check_longer_than :name, nil, &quot;ABCDEFGHI&quot;
+    check_longer_than :name, 9, &quot;Some really long name&quot;
+  end
+
+  def test_maximum_size_of_location
+    # The following are equivalent if the model requires a maximum location length of 10.
+    check_longer_than :location, 10
+    check_longer_than :location, nil, &quot;ABCDEFGHIJ&quot;
+    check_longer_than :location, 10, &quot;12345678 ExtraLong Street&quot;
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000012-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 705</span>
+705:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_longer_than</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">length</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">value</span>=<span class="ruby-keyword kw">nil</span>)
+706:     <span class="ruby-identifier">length</span> = (<span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">length</span>.<span class="ruby-identifier">nil?</span>
+707:     <span class="ruby-identifier">value</span> = (<span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">length</span>.<span class="ruby-identifier">to_i</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">length</span>.<span class="ruby-identifier">to_i</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+708:     <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">item</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>), <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed #{item} longer than #{length}.&quot;</span> }
+709:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="#M000008" class="method-signature">
+          <span class="method-name">check_numericality_of</span><span class="method-args">(item, value=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to be numeric by the model. Best
+paired with validates_numericality_of. If no value is given, a non numeric
+value will be created by treating the default value as a string, removing
+the last digit, and adding the letter &#8216;z&#8217; to the beginning of
+the string.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;,
+    :quantity =&gt; 7
+  }
+
+  def test_numericality_of_quantity
+    check_numericality_of :quantity
+    check_numericality_of :quantity, 'cabbadabbajabba'
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000008-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 579</span>
+579:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_numericality_of</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">value</span>=<span class="ruby-keyword kw">nil</span>)
+580:     <span class="ruby-identifier">value</span> = (<span class="ruby-value str">&quot;z&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+581:     <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">item</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>), <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed a nonnumeric #{item}.&quot;</span> }
+582:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="#M000007" class="method-signature">
+          <span class="method-name">check_presence_of</span><span class="method-args">(item)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to be present by the model. Best
+paired with validates_presence_of.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_presence_of_name
+    check_presence_of :name
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 558</span>
+558:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_presence_of</span>(<span class="ruby-identifier">item</span>)
+559:     <span class="ruby-identifier">instance_without</span>(<span class="ruby-identifier">item</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>), <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed an empty #{item}.&quot;</span> }
+560:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <a href="#M000011" class="method-signature">
+          <span class="method-name">check_shorter_than</span><span class="method-args">(item, length=nil, value=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to have a minimum length by the
+model. Best paired with validates_length_of.
+</p>
+<p>
+If a length is not given, the minimum length will be inferred from the
+value used.
+</p>
+<ul>
+<li>If a value is supplied then the inferred minimum length will be the length
+of the supplied value plus one.
+
+</li>
+<li>If a value is not supplied then the inferred minimum length will be exactly
+the length of the default value for the attribute.
+
+</li>
+</ul>
+<p>
+If a length is given without a value, the default attribute value will be
+trimmed down to a length of one less than the supplied length and then
+tested.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_minimum_size_of_name
+    # The following are equivalent if the model requires a minimum name length of 9.
+    check_shorter_than :name
+    check_shorter_than :name, 9
+    check_shorter_than :name, nil, &quot;Some Nam&quot;
+    check_shorter_than :name, 9, &quot;ABC&quot;
+  end
+
+  def test_minimum_size_of_location
+    # The following are equivalent if the model requires a minimum location length of 4.
+    check_shorter_than :location, 4
+    check_shorter_than :location, nil, &quot;123&quot;
+    check_shorter_than :location, 4, &quot;XYZ&quot;
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000011-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 669</span>
+669:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_shorter_than</span>(<span class="ruby-identifier">item</span>, <span class="ruby-identifier">length</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">value</span>=<span class="ruby-keyword kw">nil</span>)
+670:     <span class="ruby-identifier">length</span> = (<span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">length</span>.<span class="ruby-identifier">nil?</span>
+671:     <span class="ruby-identifier">value</span> = (<span class="ruby-value str">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">default_values</span>[<span class="ruby-identifier">item</span>].<span class="ruby-identifier">to_s</span>)[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">length</span>.<span class="ruby-identifier">to_i</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">nil?</span>
+672:     <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">item</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">value</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>), <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed #{item} shorter than #{length}.&quot;</span> }
+673:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="#M000013" class="method-signature">
+          <span class="method-name">check_uniqueness_of</span><span class="method-args">(item)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an attribute is required to be unique by the model. Best
+paired with validates_uniqueness_of.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_uniqueness_of_name
+    check_uniqueness_of :name
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000013-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 724</span>
+724:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_uniqueness_of</span>(<span class="ruby-identifier">item</span>)
+725:     <span class="ruby-identifier">with_instance</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">instance</span><span class="ruby-operator">|</span> <span class="ruby-identifier">assert</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">default_values</span>).<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">invalid?</span>(<span class="ruby-identifier">item</span>), <span class="ruby-node">&quot;#{self.class.target.name} should not have allowed a duplicate #{item}.&quot;</span> }
+726:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="#M000006" class="method-signature">
+          <span class="method-name">check_update</span><span class="method-args">(changed_values_hash)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Asserts that an instance of the model can have the specified attributes
+updated and saved. Then asserts that each updated value can be retrieved
+back from the database.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_update
+    check_update :name =&gt; &quot;Sum Name&quot;, :color =&gt; &quot;Bloo&quot;
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 531</span>
+531:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">check_update</span>(<span class="ruby-identifier">changed_values_hash</span>)
+532:     <span class="ruby-identifier">values</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">changed_values_hash</span>)
+533:     <span class="ruby-identifier">id</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:id</span>) { <span class="ruby-identifier">send</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">:one</span>).<span class="ruby-identifier">id</span> }
+534:     <span class="ruby-identifier">instance</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
+535:     <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">values</span>)
+536:     <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">save</span>
+537:     <span class="ruby-identifier">assert</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">empty?</span>, <span class="ruby-node">&quot;Failed to update to a valid #{self.class.target.name} with #{values.inspect}.\n&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">error_messages_from</span>(<span class="ruby-identifier">instance</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+538:     <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">reload</span>
+539:     <span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">attribute</span>, <span class="ruby-identifier">new_value</span><span class="ruby-operator">|</span>
+540:       <span class="ruby-identifier">current_value</span> = <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">attribute</span>)
+541:       <span class="ruby-identifier">assert_equal</span> <span class="ruby-identifier">current_value</span>, <span class="ruby-identifier">new_value</span>, <span class="ruby-node">&quot;Failed to update #{attribute} to #{new_value} for #{self.class.target.name}.\nIt is currently #{current_value}.&quot;</span>
+542:     <span class="ruby-keyword kw">end</span>
+543:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="#M000014" class="method-signature">
+          <span class="method-name">default_values</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the default values hash after resolving any delayed fixtures.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+    :user_name =&gt; users(:test_user).name
+  }
+
+  def test_delayed_fixture_resolution
+    values = default_values
+    assert_equal &quot;Some Name&quot;, values.name
+    assert_equal &quot;123 Main&quot;, values.location
+    assert_equal &quot;Blue&quot;, values.color
+    assert_equal User.find_by_name(&quot;test_user&quot;).name, values.user_name
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 746</span>
+746:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_values</span>
+747:     <span class="ruby-identifier">resolve_delayed_fixtures</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">default_values</span>
+748:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="#M000015" class="method-signature">
+          <span class="method-name">error_messages_from</span><span class="method-args">(instance, indent=0)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Recusively traverses an instance and returns a human readable set of errors
+that caused the instance not to validate. The errors are nested so that if
+a child resource is causing the problem, it is easily identifiable.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 752</span>
+752:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">error_messages_from</span>(<span class="ruby-identifier">instance</span>, <span class="ruby-identifier">indent</span>=<span class="ruby-value">0</span>)
+753:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>)
+754:       <span class="ruby-identifier">errors</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">instance</span>.<span class="ruby-identifier">errors</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">flatten</span>]
+755:       <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">attr</span>, <span class="ruby-identifier">msg</span><span class="ruby-operator">|</span>
+756:         <span class="ruby-identifier">attr_human</span> = (<span class="ruby-identifier">attr</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;base&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{attr.humanize} &quot;</span>
+757:         <span class="ruby-identifier">error_messages_from</span>(<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">attr</span>.<span class="ruby-identifier">to_sym</span>), <span class="ruby-identifier">indent</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>).<span class="ruby-identifier">unshift</span>(<span class="ruby-value str">&quot;    &quot;</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">indent</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">attr_human</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">msg</span>)
+758:       <span class="ruby-keyword kw">end</span>
+759:     <span class="ruby-keyword kw">else</span>
+760:       []
+761:     <span class="ruby-keyword kw">end</span>
+762:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
+
+        <div class="method-heading">
+          <a href="#M000004" class="method-signature">
+          <span class="method-name">instance_with</span><span class="method-args">(hash)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a new instance of the current model from the DefaultValues hash
+merged with the hash of alternate values.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_with_badly_spelled_name_and_color
+    instance = instance_with(:name =&gt; &quot;Sum Name&quot;, :color =&gt; &quot;Bloo&quot;)
+    assert_equal &quot;Sum Name&quot;, instance.name
+    assert_equal &quot;123 Main&quot;, instance.location
+    assert_equal &quot;Bloo&quot;, instance.color
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 488</span>
+488:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_with</span>(<span class="ruby-identifier">hash</span>)
+489:     <span class="ruby-identifier">values</span> = <span class="ruby-identifier">default_values</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">hash</span>)
+490:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+491:       <span class="ruby-identifier">with_instance</span> <span class="ruby-identifier">values</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span>
+492:     <span class="ruby-keyword kw">else</span>
+493:       <span class="ruby-identifier">new_instance</span> <span class="ruby-identifier">values</span>
+494:     <span class="ruby-keyword kw">end</span>
+495:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000003" class="method-detail">
+        <a name="M000003"></a>
+
+        <div class="method-heading">
+          <a href="#M000003" class="method-signature">
+          <span class="method-name">instance_without</span><span class="method-args">(*items)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a new instance of the current model from the DefaultValues hash but
+without the attributes specified.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_with_only_name
+    instance = instance_without(:location, :color)
+    assert_not_nil instance.name
+    assert_nil instance.location
+    assert_nil instance.color
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000003-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 462</span>
+462:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_without</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">items</span>)
+463:     <span class="ruby-identifier">items</span> = [<span class="ruby-identifier">items</span>].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span> }
+464:     <span class="ruby-identifier">values</span> = <span class="ruby-identifier">default_values</span>.<span class="ruby-identifier">reject</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span> <span class="ruby-identifier">items</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">key</span>)}
+465:     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+466:       <span class="ruby-identifier">with_instance</span> <span class="ruby-identifier">values</span>, <span class="ruby-operator">&amp;</span><span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span>
+467:     <span class="ruby-keyword kw">else</span>
+468:       <span class="ruby-identifier">new_instance</span> <span class="ruby-identifier">values</span>
+469:     <span class="ruby-keyword kw">end</span>
+470:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000001" class="method-detail">
+        <a name="M000001"></a>
+
+        <div class="method-heading">
+          <a href="#M000001" class="method-signature">
+          <span class="method-name">new_instance</span><span class="method-args">(values=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a new instance of the current model being tested, utilizing a hash
+of attribute names and values.
+</p>
+<p>
+If no values are passed the DefaultValues hash is used.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_with_default_values
+    instance = new_instance
+    assert_equal &quot;Some Name&quot;, instance.name
+    assert_equal &quot;123 Main&quot;, instance.location
+    assert_equal &quot;Blue&quot;, instance.color
+  end
+
+  def test_with_misspelled_values
+    instance = new_instance(:name =&gt; &quot;Sum Name&quot;, :location =&gt; &quot;123 Mane&quot;, :color =&gt; &quot;Bloo&quot;)
+    assert_equal &quot;Sum Name&quot;, instance.name
+    assert_equal &quot;123 Mane&quot;, instance.location
+    assert_equal &quot;Bloo&quot;, instance.color
+  end
+
+  def test_with_only_name
+    instance = new_instance(:name =&gt; &quot;All Alone&quot;)
+    assert_equal &quot;All Alone&quot;, instance.name
+    assert_nil instance.location
+    assert_nil instance.color
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000001-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000001-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 388</span>
+388:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_instance</span>(<span class="ruby-identifier">values</span>=<span class="ruby-keyword kw">nil</span>)
+389:     <span class="ruby-identifier">values</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-identifier">default_values</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">values</span>)
+390:     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">values</span>)
+391:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000002" class="method-detail">
+        <a name="M000002"></a>
+
+        <div class="method-heading">
+          <a href="#M000002" class="method-signature">
+          <span class="method-name">with_instance</span><span class="method-args">(values=nil) {|instance| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a new instance of the current model being tested, utilizing the
+values hash being passed. This instance is then passed to your block and
+destroyed when the block returns.
+</p>
+<p>
+If no values are passed the DefaultValues hash is used.
+</p>
+<p>
+The result of your block is returned.
+</p>
+<p>
+Example: (And a very contrived one at that. This example tests way to many
+unrelated things in one method)
+</p>
+<pre>
+  DefaultValues =  {
+    :name =&gt; &quot;Some Name&quot;,
+    :location =&gt; &quot;123 Main&quot;,
+    :color =&gt; &quot;Blue&quot;
+  }
+
+  def test_two_separate_instances_and_name_collision
+
+    reverse_color1 = with_instance do |default_instance|
+      assert_equal &quot;Some Name&quot;, default_instance.name
+      assert_equal &quot;123 Main&quot;, default_instance.location
+      assert_equal &quot;Blue&quot;, default_instance.color
+      assert default_instance.valid?
+      default_instance.color.reverse
+    end
+
+    reverse_color2 = with_instance(default_values.merge(:color =&gt; &quot;Red&quot;)) do |duplicate_name_instance|
+      assert_equal &quot;Some Name&quot;, duplicate_name_instance.name
+      assert_equal &quot;123 Main&quot;, duplicate_name_instance.location
+      assert_equal &quot;Red&quot;, duplicate_name_instance.color
+      assert duplicate_name_instance.valid?
+      duplicate_name_instance.color.reverse
+    end
+
+    assert_equal &quot;eulB&quot;, reverse_color1
+    assert_equal &quot;deR&quot;, reverse_color2
+
+    with_instance do |default_instance|
+      assert default_instance.valid?
+      with_instance(default_values.merge(:color =&gt; &quot;Red&quot;)) do |duplicate_name_instance|
+        assert !duplicate_name_instance.valid?
+      end
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000002-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/unit_test_helpers.rb, line 437</span>
+437:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with_instance</span>(<span class="ruby-identifier">values</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+438:     <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">new_instance</span>(<span class="ruby-identifier">values</span>)
+439:     <span class="ruby-keyword kw">begin</span>
+440:       <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">instance</span>)
+441:     <span class="ruby-keyword kw">ensure</span>
+442:       <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">destroy</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">nil?</span> 
+443:     <span class="ruby-keyword kw">end</span>
+444:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

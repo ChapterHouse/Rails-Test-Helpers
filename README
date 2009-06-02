@@ -1,0 +1,82 @@
+RailsTestHelpers  (v1.0.0)
+================
+
+When you write rails tests, you will find that you are writing many of the same types of tests over and over again.
+Unlike writing new types of tests that are very specific to a model or controller, doing standard tests becomes tedious
+and lets face it, no longer fun. When there is no fun, even the most ardent developer will be tempted to skip on tests.
+From there, all roads lead to madness, or at the very least a lot of pain.
+
+The Rails Test Helpers attempt to remove the tedium by making the standard tests as easy and quick as possible to write
+as well as read. They do not create a new testing infrastructure or paradigm. Rather they facilitate the built in rails
+testing process. They try to cover the most common tests and variations. Additionally they expose their inner workings
+to allow you to leverage common tasks into your own specialized tests.
+
+The simplicity of the test helpers is probably most apparent when seen in action. So, without further ado, here is an
+example of a standard unit and functional test when the helpers are applied. Compare these to your usual tests and
+decide on the speed and maintainability for yourself.
+
+Unit Test Example
+================
+
+  class ItemTest < ActiveSupport::TestCase
+  
+    DefaultValues =  {
+      :name => "Some Name",
+      :color => "Blue",
+      :placement => "Ceiling", 
+      :quantity => 7,
+      :email => "foo@bar.baz"
+    }
+  
+    test_create
+    test_format_of :email
+    test_inclusion_of :placement
+    test_length_of :name => 3..100
+    test_long :placement => 32
+    test_numericality_of :quantity
+    test_presence_of :name, :color, :placement, :quantity, :email
+    test_short :color => 3
+    test_uniqueness_of :email
+    test_update :name => "Sum Name"
+  
+  end 
+
+
+Functional Test Example
+================
+
+  class ItemsControllerTest < ActionController::TestCase
+  
+    DefaultValues =  {
+      :name => "Some Name",
+      :color => "Blue",
+      :placement => "Ceiling", 
+      :quantity => 7,
+      :email => "foo@bar.baz"
+    }
+  
+    use_defaults
+  
+    test_index
+    test_new
+    test_create
+    test_show
+    test_edit
+    test_update :name => 'Sum Name'
+    test_destroy
+    test_shouldnt_create :name => nil
+    test_shouldnt_update :name => nil
+  
+  end
+
+
+
+Requirements
+================
+
+Rails Test Helpers currently depends on Rails 2.0 or later and the Restful Authentication Plugin
+
+
+
+
+Copyright (c) 2007 Frank Hall, released under the MIT license

@@ -1,0 +1,1827 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: FunctionalTestHelpers::ClassMethods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">FunctionalTestHelpers::ClassMethods</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/functional_test_helpers_rb.html">
+                lib/functional_test_helpers.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+This module provides basic functional level test helpers to test the
+various aspects of a controller. Many of these tests will correspond to the
+standard actions that rails places in a controller. The tests will
+automatically log in and log out of the application as needed unless
+instructed not to. If these helpers do not cover a required test that falls
+outside of the standard patterns, you can leverage the underlying test
+helper instance methods in <a
+href="../FunctionalTestHelpers.html">FunctionalTestHelpers</a> and build
+your own. All of the helpers rely on a definition of a DefaultValue at the
+test class level. This is to be a hash of attribute value pairs that match
+the model.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_index
+    test_new
+    test_create
+    test_show
+    test_edit
+    test_update :name =&gt; 'Sum Name'
+    test_destroy
+    test_shouldnt_create :name =&gt; nil
+    test_shouldnt_update :name =&gt; nil
+
+  end
+</pre>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000049">default_setup</a>&nbsp;&nbsp;
+      <a href="#M000050">default_teardown</a>&nbsp;&nbsp;
+      <a href="#M000043">default_values</a>&nbsp;&nbsp;
+      <a href="#M000048">load_users_fixture</a>&nbsp;&nbsp;
+      <a href="#M000041">singleton_resource</a>&nbsp;&nbsp;
+      <a href="#M000042">singleton_resource=</a>&nbsp;&nbsp;
+      <a href="#M000051">singleton_resource?</a>&nbsp;&nbsp;
+      <a href="#M000052">target</a>&nbsp;&nbsp;
+      <a href="#M000053">target=</a>&nbsp;&nbsp;
+      <a href="#M000054">target_model</a>&nbsp;&nbsp;
+      <a href="#M000055">target_model=</a>&nbsp;&nbsp;
+      <a href="#M000056">target_name</a>&nbsp;&nbsp;
+      <a href="#M000057">target_name=</a>&nbsp;&nbsp;
+      <a href="#M000058">target_name_plural</a>&nbsp;&nbsp;
+      <a href="#M000059">target_name_plural=</a>&nbsp;&nbsp;
+      <a href="#M000060">target_symbol</a>&nbsp;&nbsp;
+      <a href="#M000061">target_symbol=</a>&nbsp;&nbsp;
+      <a href="#M000062">target_symbol_plural</a>&nbsp;&nbsp;
+      <a href="#M000063">target_symbol_plural=</a>&nbsp;&nbsp;
+      <a href="#M000064">test_create</a>&nbsp;&nbsp;
+      <a href="#M000065">test_destroy</a>&nbsp;&nbsp;
+      <a href="#M000066">test_edit</a>&nbsp;&nbsp;
+      <a href="#M000067">test_index</a>&nbsp;&nbsp;
+      <a href="#M000068">test_new</a>&nbsp;&nbsp;
+      <a href="#M000071">test_shouldnt_create</a>&nbsp;&nbsp;
+      <a href="#M000072">test_shouldnt_update</a>&nbsp;&nbsp;
+      <a href="#M000069">test_show</a>&nbsp;&nbsp;
+      <a href="#M000070">test_update</a>&nbsp;&nbsp;
+      <a href="#M000073">use_defaults</a>&nbsp;&nbsp;
+      <a href="#M000044">user_model</a>&nbsp;&nbsp;
+      <a href="#M000045">user_model=</a>&nbsp;&nbsp;
+      <a href="#M000046">user_symbol</a>&nbsp;&nbsp;
+      <a href="#M000047">user_symbol=</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000049" class="method-detail">
+        <a name="M000049"></a>
+
+        <div class="method-heading">
+          <a href="#M000049" class="method-signature">
+          <span class="method-name">default_setup</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create the test setup method that defines the controller, request, and
+response instance variables. Then login to the application. To skip the
+login, pass the symbol :without_login or a hash value of :without_login
+=&gt; true. If you need to do additional steps before or after the setup,
+use the :prefix hash value. This will prefix the method name with the
+string passed. Then you can call this generated method anywhere in your own
+setup method. All other parameters will be passed to <a
+href="../FunctionalTestHelpers.html#M000032">FunctionalTestHelpers#login</a>.
+If you are going to use both the <a
+href="ClassMethods.html#M000049">default_setup</a> and <a
+href="ClassMethods.html#M000050">default_teardown</a> see <a
+href="ClassMethods.html#M000073">use_defaults</a>.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    default_setup
+
+  end
+</pre>
+<p>
+or
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    default_setup :without_login
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000049-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 220</span>
+220:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_setup</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+221:       <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}
+222:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">arg</span>] = <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) }
+223:       <span class="ruby-identifier">method_name</span> = <span class="ruby-node">&quot;#{options[:prefix]}setup&quot;</span>.<span class="ruby-identifier">to_sym</span>
+224:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:without_login</span>]
+225:         <span class="ruby-identifier">load_users_fixture</span>
+226:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>) <span class="ruby-keyword kw">do</span>
+227:           <span class="ruby-ivar">@controller</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">new</span>
+228:           <span class="ruby-ivar">@request</span>    = <span class="ruby-constant">ActionController</span><span class="ruby-operator">::</span><span class="ruby-constant">TestRequest</span>.<span class="ruby-identifier">new</span>
+229:           <span class="ruby-ivar">@response</span>   = <span class="ruby-constant">ActionController</span><span class="ruby-operator">::</span><span class="ruby-constant">TestResponse</span>.<span class="ruby-identifier">new</span>
+230:           <span class="ruby-identifier">login</span> <span class="ruby-identifier">options</span>
+231:         <span class="ruby-keyword kw">end</span>
+232:       <span class="ruby-keyword kw">else</span>
+233:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>) <span class="ruby-keyword kw">do</span>
+234:           <span class="ruby-ivar">@controller</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">target</span>.<span class="ruby-identifier">new</span>
+235:           <span class="ruby-ivar">@request</span>    = <span class="ruby-constant">ActionController</span><span class="ruby-operator">::</span><span class="ruby-constant">TestRequest</span>.<span class="ruby-identifier">new</span>
+236:           <span class="ruby-ivar">@response</span>   = <span class="ruby-constant">ActionController</span><span class="ruby-operator">::</span><span class="ruby-constant">TestResponse</span>.<span class="ruby-identifier">new</span>
+237:         <span class="ruby-keyword kw">end</span>
+238:       <span class="ruby-keyword kw">end</span>
+239:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
+
+        <div class="method-heading">
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">default_teardown</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Logoff the user after the test unless the :without_login symbol or
+:without_login =&gt; true hash value is passed. If the :without_login
+parameter is used, an empty teardown will still be generated. If you need
+to do additional steps before or after the teardown, use the :prefix hash
+value. This will prefix the method name with the string passed. Then you
+can call this generated method anywhere in your own teardown method. If you
+are going to use both the <a
+href="ClassMethods.html#M000049">default_setup</a> and <a
+href="ClassMethods.html#M000050">default_teardown</a> see <a
+href="ClassMethods.html#M000073">use_defaults</a>.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    default_teardown
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 254</span>
+254:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_teardown</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+255:       <span class="ruby-identifier">options</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">dup</span> <span class="ruby-operator">:</span> {}
+256:       <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">arg</span>] = <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) }
+257:       <span class="ruby-identifier">method_name</span> = <span class="ruby-node">&quot;#{options[:prefix]}teardown&quot;</span>.<span class="ruby-identifier">to_sym</span>
+258:       <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:without_login</span>]
+259:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>) { <span class="ruby-identifier">logout</span> <span class="ruby-identifier">options</span> }
+260:       <span class="ruby-keyword kw">else</span>
+261:         <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>) {}
+262:       <span class="ruby-keyword kw">end</span>
+263:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000043" class="method-detail">
+        <a name="M000043"></a>
+
+        <div class="method-heading">
+          <a href="#M000043" class="method-signature">
+          <span class="method-name">default_values</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the default values to be used in tests. The default values are
+declared as a constant hash with the name DefaultValues in the test class.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    def self.default_name
+      default_values[:name]  #=&gt; &quot;Some Name&quot;
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000043-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 108</span>
+108:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_values</span>
+109:       <span class="ruby-identifier">resolve_delayed_fixtures</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:DefaultValues</span>)
+110:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000048" class="method-detail">
+        <a name="M000048"></a>
+
+        <div class="method-heading">
+          <a href="#M000048" class="method-signature">
+          <span class="method-name">load_users_fixture</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Loads the fixtures for the users if they have not already been loaded. The
+fixtures to be loaded are determined from the <a
+href="ClassMethods.html#M000046">user_symbol</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000048-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 192</span>
+192:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_users_fixture</span>
+193:       <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@users_fixture_loaded</span>
+194:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">method</span>(<span class="ruby-identifier">:fixtures</span>).<span class="ruby-identifier">call</span>(<span class="ruby-identifier">user_symbol</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">pluralize</span>.<span class="ruby-identifier">to_sym</span>)
+195:         <span class="ruby-ivar">@users_fixture_loaded</span> = <span class="ruby-keyword kw">true</span>
+196:       <span class="ruby-keyword kw">end</span>
+197:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
+
+        <div class="method-heading">
+          <a href="#M000041" class="method-signature">
+          <span class="method-name">singleton_resource</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns whether or not this is a singleton resource. The default is nil. To
+define that a resource is a singleton, declare the constant
+SingletonResource as true in your test class. Alternately you can use the
+<a href="ClassMethods.html#M000042">singleton_resource=</a> method as well.
+The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    SingletonResource true
+
+    def self.the_current_singleton_setting
+      singleton_resource # =&gt; true
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000041-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000041-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 70</span>
+70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">singleton_resource</span>
+71:       <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:SingletonResource</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:SingletonResource</span>) <span class="ruby-operator">:</span> <span class="ruby-ivar">@singleton_resource</span>
+72:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
+
+        <div class="method-heading">
+          <a href="#M000042" class="method-signature">
+          <span class="method-name">singleton_resource=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Defines the tested resource as a singleton. The default is nil. Normally
+this is done by setting the constant SingletonResource to true in your test
+class. However, if for some reason that is not feasible, you may use this
+setter. The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    singleton_resource = true
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000042-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 86</span>
+86:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">singleton_resource=</span>(<span class="ruby-identifier">new_value</span>)
+87:       <span class="ruby-ivar">@singleton_resource</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:SingletonResource</span>)
+88:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
+
+        <div class="method-heading">
+          <a href="#M000051" class="method-signature">
+          <span class="method-name">singleton_resource?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns whether or not the resource being tested is a singleton resource.
+If the singularity has not been expressly set by the constant
+SingletonResource or the method single_resource= then this method will
+attempt to dynamically determine if the resource is a singleton by
+comparing the singular resource name against the plural. If they match then
+the resource is considered a singleton. Obviously in the case of irregular
+nouns like &quot;sheep&quot; this will be incorrect. In that case,
+explicitly set the singleton to false.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.am_I_alone?
+      singleton_resource? #=&gt; false
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 280</span>
+280:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">singleton_resource?</span>
+281:       <span class="ruby-identifier">tester_klass</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>
+282:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tester_klass</span>.<span class="ruby-identifier">singleton_resource</span>.<span class="ruby-identifier">nil?</span>
+283:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-15</span>] <span class="ruby-operator">!=</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-15</span>].<span class="ruby-identifier">pluralize</span>
+284:           <span class="ruby-identifier">tester_klass</span>.<span class="ruby-identifier">singleton_resource</span> = <span class="ruby-keyword kw">true</span>
+285:         <span class="ruby-keyword kw">else</span>
+286:           <span class="ruby-identifier">tester_klass</span>.<span class="ruby-identifier">singleton_resource</span> = <span class="ruby-keyword kw">false</span>
+287:         <span class="ruby-keyword kw">end</span>
+288:       <span class="ruby-keyword kw">end</span>
+289:       <span class="ruby-identifier">tester_klass</span>.<span class="ruby-identifier">singleton_resource</span>
+290:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
+
+        <div class="method-heading">
+          <a href="#M000052" class="method-signature">
+          <span class="method-name">target</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="ClassMethods.html#M000052">target</a> of the test. The
+default is determined from the name of the test. Thus, ItemsControllerTest
+becomes ItemsController. To change the <a
+href="ClassMethods.html#M000052">target</a> either set the constant Target
+to the correct controller in your test class or use the <a
+href="ClassMethods.html#M000053">target=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_am_I_testing
+      target #=&gt; ItemsController
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 305</span>
+305:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+306:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+307:         <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:Target</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:Target</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-5</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>)
+308:       <span class="ruby-keyword kw">else</span>
+309:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+310:       <span class="ruby-keyword kw">end</span>
+311:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
+
+        <div class="method-heading">
+          <a href="#M000053" class="method-signature">
+          <span class="method-name">target=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the <a href="ClassMethods.html#M000052">target</a> of the test. The
+default is determined from the name of the test. Thus, ItemsControllerTest
+becomes ItemsController. Normally this is done by setting the constant
+Target to the correct controller in your test class. However, if for some
+reason that is not feasible, you may use this setter. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target = ThingsController
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 325</span>
+325:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target=</span>(<span class="ruby-identifier">new_value</span>)
+326:       <span class="ruby-ivar">@target</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:Target</span>)
+327:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
+
+        <div class="method-heading">
+          <a href="#M000054" class="method-signature">
+          <span class="method-name">target_model</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the model that accompanies the controller <a
+href="ClassMethods.html#M000052">target</a> of the test. The default is
+determined from the <a href="ClassMethods.html#M000052">target</a>. Thus,
+ItemsController becomes Item. To change the <a
+href="ClassMethods.html#M000052">target</a> model either set the constant
+TargetModel to the correct model in your test class or use the <a
+href="ClassMethods.html#M000055">target_model=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_model_am_I_using
+      target_model #=&gt; Item
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 342</span>
+342:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_model</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+343:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+344:         <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetModel</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:TargetModel</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target_model</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">target</span>.<span class="ruby-identifier">name</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">-11</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">constantize</span>)
+345:       <span class="ruby-keyword kw">else</span>
+346:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target_model</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+347:       <span class="ruby-keyword kw">end</span>
+348:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
+
+        <div class="method-heading">
+          <a href="#M000055" class="method-signature">
+          <span class="method-name">target_model=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the model that accompanies the controller <a
+href="ClassMethods.html#M000052">target</a> of the test. The default is
+determined from the <a href="ClassMethods.html#M000052">target</a>. Thus,
+ItemsController becomes Item. Normally this is done by setting the constant
+TargetModel to the correct model in your test class. However, if for some
+reason that is not feasible, you may use this setter. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target_model = Thing
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 362</span>
+362:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_model=</span>(<span class="ruby-identifier">new_value</span>)
+363:       <span class="ruby-ivar">@target_model</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetModel</span>)
+364:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
+
+        <div class="method-heading">
+          <a href="#M000056" class="method-signature">
+          <span class="method-name">target_name</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the human readable name that is used in error messages. The default
+is determined from the <a
+href="ClassMethods.html#M000054">target_model</a>. To change the <a
+href="ClassMethods.html#M000052">target</a> name either set the constant
+TargetName to the correct name in your test class or use the <a
+href="ClassMethods.html#M000057">target_name=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_name_am_I_using
+      target_name #=&gt; &quot;Item&quot;
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 379</span>
+379:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_name</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+380:      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+381:         (<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetName</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:TargetName</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target_name</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">titleize</span>)).<span class="ruby-identifier">to_s</span>
+382:       <span class="ruby-keyword kw">else</span>
+383:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target_name</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+384:       <span class="ruby-keyword kw">end</span>
+385:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
+
+        <div class="method-heading">
+          <a href="#M000057" class="method-signature">
+          <span class="method-name">target_name=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the human readable name that is used in error messages. The default is
+determined from the <a href="ClassMethods.html#M000054">target_model</a>.
+Normally this is done by setting the constant TargetName to the correct
+model in your test class. However, if for some reason that is not feasible,
+you may use this setter. The constant definition takes presence over the
+attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target_name = &quot;Some Special Thing&quot;
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 399</span>
+399:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_name=</span>(<span class="ruby-identifier">new_value</span>)
+400:       <span class="ruby-ivar">@target_name</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetName</span>)
+401:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
+
+        <div class="method-heading">
+          <a href="#M000058" class="method-signature">
+          <span class="method-name">target_name_plural</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the human readable plural name that is used in error messages. The
+default is determined from the <a
+href="ClassMethods.html#M000056">target_name</a>. To change the <a
+href="ClassMethods.html#M000052">target</a> name either set the constant
+TargetNamePlural to the correct plural name in your test class or use the
+<a href="ClassMethods.html#M000057">target_name=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_plural_name_am_I_using
+      target_name #=&gt; &quot;Items&quot;
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000058-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000058-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 416</span>
+416:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_name_plural</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+417:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+418:         (<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetNamePlural</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:TargetNamePlural</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target_name_plural</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">target_name</span>.<span class="ruby-identifier">pluralize</span>)).<span class="ruby-identifier">to_s</span>
+419:       <span class="ruby-keyword kw">else</span>
+420:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target_name_plural</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+421:       <span class="ruby-keyword kw">end</span>
+422:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000059" class="method-detail">
+        <a name="M000059"></a>
+
+        <div class="method-heading">
+          <a href="#M000059" class="method-signature">
+          <span class="method-name">target_name_plural=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the human readable plural name that is used in error messages. The
+default is determined from the <a
+href="ClassMethods.html#M000056">target_name</a>. Normally this is done by
+setting the constant TargetNamePlural to the correct plural name in your
+test class. However, if for some reason that is not feasible, you may use
+this setter. The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target_plural_name = &quot;Some Special Things&quot;
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000059-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 436</span>
+436:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_name_plural=</span>(<span class="ruby-identifier">new_value</span>)
+437:       <span class="ruby-ivar">@target_name_plural</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetNamePlural</span>)
+438:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
+
+        <div class="method-heading">
+          <a href="#M000060" class="method-signature">
+          <span class="method-name">target_symbol</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the symbol name that is used for parameter and assigns checks. The
+default is determined from the <a
+href="ClassMethods.html#M000054">target_model</a>. To change the <a
+href="ClassMethods.html#M000052">target</a> name either set the constant
+TargetSymbol to the correct symbol in your test class or use the <a
+href="ClassMethods.html#M000057">target_name=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_parameter_am_I_using
+      target_symbol #=&gt; :item
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000060-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 453</span>
+453:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_symbol</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+454:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+455:         (<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetSymbol</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:TargetSymbol</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target_symbol</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">underscore</span>)).<span class="ruby-identifier">to_sym</span>
+456:       <span class="ruby-keyword kw">else</span>
+457:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target_symbol</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+458:       <span class="ruby-keyword kw">end</span>
+459:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
+
+        <div class="method-heading">
+          <a href="#M000061" class="method-signature">
+          <span class="method-name">target_symbol=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the symbol name that is used for parameter and assigns checks. The
+default is determined from the <a
+href="ClassMethods.html#M000054">target_model</a>. Normally this is done by
+setting the constant TargetSymbol to the correct symbol in your test class.
+However, if for some reason that is not feasible, you may use this setter.
+The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target_symbol = :thingamabob
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 473</span>
+473:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_symbol=</span>(<span class="ruby-identifier">new_value</span>)
+474:       <span class="ruby-ivar">@target_symbol</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetSymbol</span>)
+475:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
+
+        <div class="method-heading">
+          <a href="#M000062" class="method-signature">
+          <span class="method-name">target_symbol_plural</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the plural symbol name that is used for parameter and assigns
+checks. The default is determined from the <a
+href="ClassMethods.html#M000060">target_symbol</a>. To change the <a
+href="ClassMethods.html#M000052">target</a> name either set the constant
+TargetSymbolPlural to the correct symbol in your test class or use the <a
+href="ClassMethods.html#M000057">target_name=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.what_plural_parameter_am_I_using
+      target_symbol #=&gt; :items
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000062-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 490</span>
+490:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_symbol_plural</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+491:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+492:         (<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetSymbolPlural</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:TargetSymbolPlural</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@target_symbol_plural</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">target_symbol</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">pluralize</span>)).<span class="ruby-identifier">to_sym</span>
+493:       <span class="ruby-keyword kw">else</span>
+494:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target_symbol_plural</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+495:       <span class="ruby-keyword kw">end</span>
+496:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">target_symbol_plural=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the plural symbol name that is used for parameter and assigns checks.
+The default is determined from the <a
+href="ClassMethods.html#M000060">target_symbol</a>. Normally this is done
+by setting the constant TargetSymbolPlural to the correct symbol in your
+test class. However, if for some reason that is not feasible, you may use
+this setter. The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    target_symbol_plural = :thingamabobs
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 510</span>
+510:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">target_symbol_plural=</span>(<span class="ruby-identifier">new_value</span>)
+511:       <span class="ruby-ivar">@target_symbol_plural</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:TargetSymbolPlural</span>)
+512:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <a href="#M000064" class="method-signature">
+          <span class="method-name">test_create</span><span class="method-args">(*values_hashes)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource creation using the default values and any
+additional value hashes given. Each additional hash will be merged with the
+default values and will result in additional creation checks. The expected
+redirect after each creation is also checked. If the location is different
+from the standard, then use the :redirect_to hash value to specify the new
+desired location. The following example will attempt to create two seperate
+resources that are only different in color.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_create :color =&gt; &quot;Red&quot;
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 535</span>
+535:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_create</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">values_hashes</span>)
+536:       <span class="ruby-identifier">values_hashes</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-identifier">default_values</span>
+537:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_create_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+538:         <span class="ruby-identifier">values_hashes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">values_hash</span><span class="ruby-operator">|</span>
+539:           <span class="ruby-identifier">assert_kind_of</span> <span class="ruby-constant">Hash</span>, <span class="ruby-identifier">values_hash</span>, <span class="ruby-node">&quot;Cannot test with a #{values_hash.class.name}. Hashes are required. Value given: #{values_hash.inspect}&quot;</span>
+540:           <span class="ruby-identifier">values_hash</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">default_values</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">values_hash</span>))
+541:           <span class="ruby-identifier">old_count</span> = <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+542:           <span class="ruby-identifier">post</span> <span class="ruby-identifier">:create</span>, <span class="ruby-identifier">target_symbol</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">values_hash</span>
+543:           <span class="ruby-identifier">assert_equal</span> <span class="ruby-identifier">old_count</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>, <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span>, <span class="ruby-node">&quot;Failed to create a #{target_name} with #{values_hash.inspect}.&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+544:           <span class="ruby-identifier">redirect_target</span> = <span class="ruby-identifier">values_hash</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:redirect_to</span>) { <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{target_symbol}_path&quot;</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">assigns</span>(<span class="ruby-identifier">target_symbol</span>)) }
+545:           <span class="ruby-identifier">assert_redirected_to</span> <span class="ruby-identifier">redirect_target</span>
+546:         <span class="ruby-keyword kw">end</span>
+547:       <span class="ruby-keyword kw">end</span>
+548:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">test_destroy</span><span class="method-args">(*ids_and_counts)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource destruction using the ids or fixture names
+given. If nothing is given, the fixture labeled :one will be used. The
+count of the remaining object will be checked. By default this is expected
+to be one less than what was present before. This can be changed by passing
+a hash value for :difference. The expected redirect after each creation is
+also checked. If the location is different from the standard, then use the
+:redirect_to hash value to specify the new desired location. Arrays can
+also be used to specify the id, difference, and redirection. The following
+example will attempt to destroy six seperate resources. Two of them expect
+differences other than 1.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_destroy :this_one, 5, {:id =&gt; :that_one, :difference =&gt; 8}, 3, [:another, 4], items(:last_one).id
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 573</span>
+573:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_destroy</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">ids_and_counts</span>)
+574:       <span class="ruby-identifier">ids_and_counts</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">:one</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ids_and_counts</span>.<span class="ruby-identifier">empty?</span>
+575:       <span class="ruby-identifier">ids_and_counts</span>.<span class="ruby-identifier">map!</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">idc</span><span class="ruby-operator">|</span>
+576:         <span class="ruby-identifier">idc</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">idc</span>
+577:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span> <span class="ruby-keyword kw">then</span> [<span class="ruby-identifier">idc</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">:one</span>, <span class="ruby-identifier">idc</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">idc</span>[<span class="ruby-value">2</span>]]
+578:           <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span> <span class="ruby-keyword kw">then</span> [<span class="ruby-identifier">idc</span>[<span class="ruby-identifier">:id</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">:one</span>, <span class="ruby-identifier">idc</span>[<span class="ruby-identifier">:difference</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>, <span class="ruby-identifier">idc</span>[<span class="ruby-identifier">:redirect_to</span>]]
+579:           <span class="ruby-keyword kw">else</span> [<span class="ruby-identifier">idc</span>, <span class="ruby-value">1</span>, <span class="ruby-keyword kw">nil</span>]
+580:         <span class="ruby-keyword kw">end</span>
+581:         <span class="ruby-identifier">idc</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">idc</span>[<span class="ruby-value">0</span>]).<span class="ruby-identifier">id</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">idc</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+582:         <span class="ruby-identifier">idc</span>
+583:       <span class="ruby-keyword kw">end</span>
+584:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_destroy_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+585:         <span class="ruby-identifier">ids_and_counts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">idc</span><span class="ruby-operator">|</span>
+586:           <span class="ruby-identifier">id</span>, <span class="ruby-identifier">count_difference</span>, <span class="ruby-identifier">redirect_target</span> = <span class="ruby-identifier">idc</span>
+587:           <span class="ruby-identifier">original_id</span> = <span class="ruby-identifier">original_id</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{original_id.inspect} &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;&quot;</span>
+588:           <span class="ruby-identifier">id</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">id</span>)
+589:           <span class="ruby-identifier">redirect_target</span> = <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{target_symbol_plural}_path&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">redirect_target</span>
+590:           <span class="ruby-identifier">old_count</span> = <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+591:           <span class="ruby-identifier">delete</span> <span class="ruby-identifier">:destroy</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>
+592:           <span class="ruby-identifier">expected_count</span> = <span class="ruby-identifier">old_count</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">count_difference</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+593:           <span class="ruby-identifier">assert_equal</span> <span class="ruby-identifier">expected_count</span>, <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span>, <span class="ruby-node">&quot;Failed to properly destroy #{target_name} #{original_id}(id: #{id}). Expected #{expected_count} items remaining. Found #{target_model.count} instead.&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+594:           <span class="ruby-identifier">assert_redirected_to</span> <span class="ruby-identifier">redirect_target</span>, <span class="ruby-node">&quot;Failed to destroy #{target_name} #{original_id}with id #{id}.&quot;</span>
+595:         <span class="ruby-keyword kw">end</span>
+596:       <span class="ruby-keyword kw">end</span>
+597:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
+
+        <div class="method-heading">
+          <a href="#M000066" class="method-signature">
+          <span class="method-name">test_edit</span><span class="method-args">(*ids)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource edit form using the ids or fixture names given.
+If nothing is given, the fixture labeled :one will be used.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_edit :this_one, :that_one, 5, 7, 1, 3, :another, items(:last_one).id
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 616</span>
+616:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_edit</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">ids</span>)
+617:       <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">:one</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">empty?</span>
+618:       <span class="ruby-identifier">original_ids</span> = <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">dup</span>
+619:       <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">map!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">id</span>).<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">id</span> }
+620:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_get_edit_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+621:         <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+622:           <span class="ruby-identifier">original_id</span> = <span class="ruby-identifier">original_ids</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{original_ids[i].inspect} &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;&quot;</span>
+623:           <span class="ruby-identifier">id</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">id</span>)
+624:           <span class="ruby-identifier">error_message</span> = <span class="ruby-node">&quot;Could not edit #{target_name} #{original_id}with id #{id}.&quot;</span>
+625:           <span class="ruby-identifier">get</span> <span class="ruby-identifier">:edit</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>
+626:           <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">:success</span>, <span class="ruby-identifier">error_message</span>
+627:         <span class="ruby-keyword kw">end</span>
+628:       <span class="ruby-keyword kw">end</span>
+629:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
+
+        <div class="method-heading">
+          <a href="#M000067" class="method-signature">
+          <span class="method-name">test_index</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard index retrieval and instance variable assignment.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_index
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 648</span>
+648:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_index</span>
+649:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_get_#{target_symbol_plural}_index&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+650:         <span class="ruby-identifier">get</span> <span class="ruby-identifier">:index</span>
+651:         <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">:success</span><span class="ruby-comment cmt">#, &quot;Failed to get #{target_name} index.&quot;</span>
+652:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">singleton_resource?</span>
+653:           <span class="ruby-identifier">assert</span> <span class="ruby-identifier">assigns</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">target_symbol_plural</span>.<span class="ruby-identifier">to_s</span>), <span class="ruby-node">&quot;@#{target_symbol_plural} was not assigned in the index.&quot;</span>
+654:         <span class="ruby-keyword kw">else</span>
+655:           <span class="ruby-identifier">assert</span> <span class="ruby-identifier">assigns</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">target_symbol</span>.<span class="ruby-identifier">to_s</span>), <span class="ruby-node">&quot;@#{target_symbol} was not assigned in the index.&quot;</span>
+656:         <span class="ruby-keyword kw">end</span>
+657:       <span class="ruby-keyword kw">end</span>
+658:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
+
+        <div class="method-heading">
+          <a href="#M000068" class="method-signature">
+          <span class="method-name">test_new</span><span class="method-args">(*values_hashes)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard new resource prototype using the default values and any
+additional value hashes given. Each additional hash will be merged with the
+default values and will result in additional prototype checks. The
+following example will attempt to prototype two seperate resources that are
+only different in color.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_new :color =&gt; &quot;Red&quot;
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 679</span>
+679:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">values_hashes</span>)
+680:       <span class="ruby-identifier">values_hashes</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-identifier">default_values</span>
+681:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_get_new_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+682:         <span class="ruby-identifier">values_hashes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">values_hash</span><span class="ruby-operator">|</span>
+683:           <span class="ruby-identifier">assert_kind_of</span> <span class="ruby-constant">Hash</span>, <span class="ruby-identifier">values_hash</span>, <span class="ruby-node">&quot;Cannot test with a #{values_hash.class.name}. Hashes are required. Value given: #{values_hash.inspect}&quot;</span>
+684:           <span class="ruby-identifier">values_hash</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">default_values</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">values_hash</span>))
+685:           <span class="ruby-identifier">get</span> <span class="ruby-identifier">:new</span>, <span class="ruby-identifier">values_hash</span>
+686:           <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">:success</span>, <span class="ruby-node">&quot;Failed to get a new #{target_name} with values #{values_hash.inspect}.&quot;</span>
+687:         <span class="ruby-keyword kw">end</span>
+688:       <span class="ruby-keyword kw">end</span>
+689:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
+
+        <div class="method-heading">
+          <a href="#M000071" class="method-signature">
+          <span class="method-name">test_shouldnt_create</span><span class="method-args">(*bad_values_hashes)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource creation failure using the value hashes given..
+Each hash given will be merged with the default values and will result in
+additional creation failure checks.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_shouldnt_create :name =&gt; nil
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 790</span>
+790:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_shouldnt_create</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">bad_values_hashes</span>)
+791:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_shouldnt_create_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+792:         <span class="ruby-identifier">assert</span> <span class="ruby-identifier">bad_values_hashes</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-value str">&quot;Must provide at least one hash of values to test with.&quot;</span>
+793:         <span class="ruby-identifier">bad_values_hashes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bad_values_hash</span><span class="ruby-operator">|</span>
+794:           <span class="ruby-identifier">assert_kind_of</span> <span class="ruby-constant">Hash</span>, <span class="ruby-identifier">bad_values_hash</span>, <span class="ruby-node">&quot;Cannot test with a #{bad_values_hash.class.name}. Hashes are required. Value given: #{bad_values_hash.inspect}&quot;</span>
+795:           <span class="ruby-identifier">values</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">default_values</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">bad_values_hash</span>))
+796:           <span class="ruby-identifier">required_response</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:assert</span>) { <span class="ruby-identifier">:success</span> }
+797:           <span class="ruby-identifier">old_count</span> = <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+798:           <span class="ruby-identifier">post</span> <span class="ruby-identifier">:create</span>, <span class="ruby-identifier">target_symbol</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">values</span>
+799:           <span class="ruby-identifier">assert_equal</span> <span class="ruby-identifier">old_count</span>, <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">count</span>, <span class="ruby-node">&quot;Should not have created a #{target_name} with #{values.inspect}.&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:count</span>)
+800:           <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">required_response</span>
+801:         <span class="ruby-keyword kw">end</span>
+802:       <span class="ruby-keyword kw">end</span>
+803:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
+
+        <div class="method-heading">
+          <a href="#M000072" class="method-signature">
+          <span class="method-name">test_shouldnt_update</span><span class="method-args">(*bad_values_hashes)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource update failure using the value hashes given.
+Each hash will will result in additional update checks. The fixture labeled
+:one will be the the resource updated. If a different resource is desired,
+pass an :id hash value.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_update :name =&gt; nil
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 824</span>
+824:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_shouldnt_update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">bad_values_hashes</span>)
+825:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_shouldnt_update_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+826:         <span class="ruby-identifier">assert</span> <span class="ruby-identifier">bad_values_hashes</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-value str">&quot;Must provide at least one hash of values to test with.&quot;</span>
+827:         <span class="ruby-identifier">bad_values_hashes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bad_values_hash</span><span class="ruby-operator">|</span>
+828:           <span class="ruby-identifier">assert_kind_of</span> <span class="ruby-constant">Hash</span>, <span class="ruby-identifier">bad_values_hash</span>, <span class="ruby-node">&quot;Cannot test with a #{bad_values_hash.class.name}. Hashes are required. Value given: #{bad_values_hash.inspect}&quot;</span>
+829:           <span class="ruby-identifier">values</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">bad_values_hash</span>)
+830:           <span class="ruby-identifier">id</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:id</span>) { <span class="ruby-identifier">send</span>(<span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">:one</span>).<span class="ruby-identifier">id</span> }
+831:           <span class="ruby-identifier">required_response</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:assert</span>) { <span class="ruby-identifier">:success</span> }
+832:           <span class="ruby-identifier">old_values</span> = <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>)
+833:           <span class="ruby-identifier">post</span> <span class="ruby-identifier">:update</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>, <span class="ruby-identifier">target_symbol</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">values</span>
+834:           <span class="ruby-identifier">assert_equal</span> <span class="ruby-identifier">old_values</span>, <span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">id</span>), <span class="ruby-node">&quot;Should not have updated a #{target_name} (id: #{id}) with #{values.inspect}.&quot;</span>
+835:           <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">required_response</span>
+836:         <span class="ruby-keyword kw">end</span>
+837:       <span class="ruby-keyword kw">end</span>
+838:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
+
+        <div class="method-heading">
+          <a href="#M000069" class="method-signature">
+          <span class="method-name">test_show</span><span class="method-args">(*ids)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource retrieval using the ids or fixture names given.
+If nothing is given, the fixture labeled :one will be used.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_show :this_one, :that_one, 5, 7, 1, 3, :another, items(:last_one).id
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 708</span>
+708:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_show</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">ids</span>)
+709:       <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">push</span> <span class="ruby-identifier">:one</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">empty?</span>
+710:       <span class="ruby-identifier">original_ids</span> = <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">dup</span>
+711:       <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">map!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-identifier">id</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">id</span>).<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">id</span> }
+712:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_show_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+713:         <span class="ruby-identifier">ids</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span>, <span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+714:           <span class="ruby-identifier">original_id</span> = <span class="ruby-identifier">original_ids</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{original_ids[i].inspect} &quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;&quot;</span>
+715:           <span class="ruby-identifier">id</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">id</span>)
+716:           <span class="ruby-identifier">error_message</span> = <span class="ruby-node">&quot;Could not show #{target_name} #{original_id}with id #{id}.&quot;</span>
+717:           <span class="ruby-identifier">get</span> <span class="ruby-identifier">:show</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>
+718:           <span class="ruby-identifier">assert_response</span> <span class="ruby-identifier">:success</span>, <span class="ruby-identifier">error_message</span>
+719:         <span class="ruby-keyword kw">end</span>
+720:       <span class="ruby-keyword kw">end</span>
+721:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
+
+        <div class="method-heading">
+          <a href="#M000070" class="method-signature">
+          <span class="method-name">test_update</span><span class="method-args">(*changed_values_hashes)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Test for standard resource update using the value hashes given. Each hash
+will will result in additional update checks. The fixture labeled :one will
+be the the resource updated. If a different resource is desired, pass an
+:id hash value. The expected redirect after each update is also checked. If
+the location is different from the standard, then use the :redirect_to hash
+value to specify the new desired location.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    DefaultValues =  {
+      :name =&gt; &quot;Some Name&quot;,
+      :location =&gt; &quot;123 Main&quot;,
+      :color =&gt; &quot;Blue&quot;
+    }
+
+    use_defaults
+
+    test_update :name =&gt; &quot;Sum Name&quot;
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 744</span>
+744:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">test_update</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">changed_values_hashes</span>)
+745:       <span class="ruby-identifier">define_method</span>(<span class="ruby-node">&quot;test_should_update_#{target_symbol}&quot;</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">do</span>
+746:         <span class="ruby-identifier">assert</span> <span class="ruby-identifier">changed_values_hashes</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-value str">&quot;Must provide at least one hash of values to test with.&quot;</span>
+747:         <span class="ruby-identifier">changed_values_hashes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">changed_values_hash</span><span class="ruby-operator">|</span>
+748:           <span class="ruby-identifier">assert_kind_of</span> <span class="ruby-constant">Hash</span>, <span class="ruby-identifier">changed_values_hash</span>, <span class="ruby-node">&quot;Cannot test with a #{changed_values_hash.class.name}. Hashes are required. Value given: #{changed_values_hash.inspect}&quot;</span>
+749:           <span class="ruby-identifier">values</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">changed_values_hash</span>)
+750:           <span class="ruby-identifier">original_id</span> = <span class="ruby-identifier">values</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:id</span>) { <span class="ruby-identifier">:one</span> } 
+751:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">original_id</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+752:             <span class="ruby-identifier">id</span> = <span class="ruby-identifier">send</span>(<span class="ruby-identifier">target_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">original_id</span>).<span class="ruby-identifier">id</span>
+753:             <span class="ruby-identifier">original_id</span> = <span class="ruby-node">&quot;#{original_id.inspect} &quot;</span>
+754:           <span class="ruby-keyword kw">else</span>
+755:             <span class="ruby-identifier">id</span> = <span class="ruby-identifier">original_id</span>
+756:             <span class="ruby-identifier">original_id</span> = <span class="ruby-value str">&quot;&quot;</span>
+757:           <span class="ruby-keyword kw">end</span>
+758:           <span class="ruby-identifier">id</span> = <span class="ruby-identifier">resolve_delayed_fixtures</span>(<span class="ruby-identifier">id</span>)
+759:           <span class="ruby-identifier">post</span> <span class="ruby-identifier">:update</span>, <span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span>, <span class="ruby-identifier">target_symbol</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">values</span>
+760:           <span class="ruby-identifier">assert</span> <span class="ruby-identifier">assigns</span>(<span class="ruby-identifier">target_symbol</span>), <span class="ruby-node">&quot;Update failed to assign @#{target_symbol} when updating #{target_name} #{original_id}(id: #{id}) with #{values.inspect}.&quot;</span>
+761:           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">singleton_resource?</span>
+762:             <span class="ruby-identifier">redirect_target</span> = <span class="ruby-identifier">changed_values_hash</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:redirect_to</span>) { <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{target_symbol}_path&quot;</span>.<span class="ruby-identifier">to_sym</span>) }
+763:             <span class="ruby-identifier">assert_redirected_to</span> <span class="ruby-identifier">redirect_target</span>, <span class="ruby-node">&quot;Failed to update a #{target_name} #{original_id}(id: #{id}) with #{values.inspect}.&quot;</span>
+764:           <span class="ruby-keyword kw">else</span>
+765:             <span class="ruby-identifier">redirect_target</span> = <span class="ruby-identifier">changed_values_hash</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:redirect_to</span>) { <span class="ruby-identifier">send</span>(<span class="ruby-node">&quot;#{target_symbol}_path&quot;</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">assigns</span>(<span class="ruby-identifier">target_symbol</span>)) }
+766:             <span class="ruby-identifier">assert_redirected_to</span> <span class="ruby-identifier">redirect_target</span>, <span class="ruby-node">&quot;Failed to update a #{target_name} #{original_id}(id: #{id}) with #{values.inspect}.&quot;</span>
+767:           <span class="ruby-keyword kw">end</span>
+768:         <span class="ruby-keyword kw">end</span>
+769:       <span class="ruby-keyword kw">end</span>
+770:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
+
+        <div class="method-heading">
+          <a href="#M000073" class="method-signature">
+          <span class="method-name">use_defaults</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Shortcut for specifying both <a
+href="ClassMethods.html#M000049">default_setup</a> and <a
+href="ClassMethods.html#M000050">default_teardown</a>. Arguments will be
+passed to both methods.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    use_defaults :without_login
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 849</span>
+849:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use_defaults</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+850:       <span class="ruby-identifier">default_setup</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+851:       <span class="ruby-identifier">default_teardown</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+852:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000044" class="method-detail">
+        <a name="M000044"></a>
+
+        <div class="method-heading">
+          <a href="#M000044" class="method-signature">
+          <span class="method-name">user_model</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the model representing the users of the application. The default is
+User. To change the model used either set the constant UserModel to the
+correct model in your test class or use the <a
+href="ClassMethods.html#M000045">user_model=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    UserModel = Plebeian
+
+    def self.the_model_is
+      user_model  #=&gt; Plebeian
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000044-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000044-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 127</span>
+127:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_model</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+128:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+129:         <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:UserModel</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:UserModel</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@user_model</span> <span class="ruby-operator">||</span> <span class="ruby-constant">User</span>)
+130:       <span class="ruby-keyword kw">else</span>
+131:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">user_model</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+132:       <span class="ruby-keyword kw">end</span>
+133:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000045" class="method-detail">
+        <a name="M000045"></a>
+
+        <div class="method-heading">
+          <a href="#M000045" class="method-signature">
+          <span class="method-name">user_model=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the model representing the users of the application. The default is
+User. Normally this is done by setting the constant UserModel to the
+correct model in your test class. However, if for some reason that is not
+feasible, you may use this setter. The constant definition takes presence
+over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    user_model = Plebeian
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000045-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000045-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 147</span>
+147:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_model=</span>(<span class="ruby-identifier">new_value</span>)
+148:       <span class="ruby-ivar">@user_model</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:UserModel</span>)
+149:       <span class="ruby-ivar">@users_fixture_loaded</span> = <span class="ruby-keyword kw">false</span>
+150:       <span class="ruby-identifier">load_users_fixture</span>
+151:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000046" class="method-detail">
+        <a name="M000046"></a>
+
+        <div class="method-heading">
+          <a href="#M000046" class="method-signature">
+          <span class="method-name">user_symbol</span><span class="method-args">(*args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the symbol for the user model of the test. The default is
+determined from the <a href="ClassMethods.html#M000044">user_model</a>. To
+change the <a href="ClassMethods.html#M000052">target</a> either set the
+constant UserSymbol to the correct symbol in your test class or use the <a
+href="ClassMethods.html#M000047">user_symbol=</a> method. The constant
+definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    def self.the_symbol_of_the_people
+      user_symbol  #=&gt; :user
+    end
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000046-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 166</span>
+166:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_symbol</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+167:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">blank?</span>
+168:         <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:UserSymbol</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">:UserSymbol</span>) <span class="ruby-operator">:</span> (<span class="ruby-ivar">@user_symbol</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user_model</span>.<span class="ruby-identifier">name</span>.<span class="ruby-identifier">tableize</span>.<span class="ruby-identifier">singularize</span>.<span class="ruby-identifier">to_sym</span>)
+169:       <span class="ruby-keyword kw">else</span>
+170:         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">target</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span>
+171:       <span class="ruby-keyword kw">end</span>
+172:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000047" class="method-detail">
+        <a name="M000047"></a>
+
+        <div class="method-heading">
+          <a href="#M000047" class="method-signature">
+          <span class="method-name">user_symbol=</span><span class="method-args">(new_value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the symbol for the user model of the test. The default is determined
+from the <a href="ClassMethods.html#M000044">user_model</a>. Normally this
+is done by setting the constant UserSymbol to the correct symbol in your
+test class. However, if for some reason that is not feasible, you may use
+this setter. The constant definition takes presence over the attribute.
+</p>
+<p>
+Example:
+</p>
+<pre>
+  class ItemsControllerTest &lt; ActionController::TestCase
+
+    user_symbol = :plebeian
+
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000047-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/functional_test_helpers.rb, line 186</span>
+186:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">user_symbol=</span>(<span class="ruby-identifier">new_value</span>)
+187:       <span class="ruby-ivar">@user_symbol</span> = <span class="ruby-identifier">new_value</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">:UserSymbol</span>)
+188:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
